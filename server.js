@@ -5,6 +5,8 @@ const errorHandler = require('./src/middleware/errorHandler')
 require('dotenv').config();
 
 const mongoose = require('mongoose');
+const syncIndexesInDatabase = require('./src/middleware/syncIndexesInDatabase');
+const { createIndexes, syncIndexInMongo } = require('./src/utils/mongoHelper/mongoHelper');
 
 // Connection URI
 const mongoString = process.env.MONGO_URL;
@@ -14,14 +16,15 @@ mongoose.connect(mongoString);
 const database = mongoose.connection;
 // exporting for this.transaction
 
+
 database.on("error", (error) => {
   console.error(error);
 });
 
 database.once("connected", () => {
   console.log("Connected to MongoDB");
+  syncIndexInMongo()
 });
-
 
 
 // Middleware to parse JSON bodies

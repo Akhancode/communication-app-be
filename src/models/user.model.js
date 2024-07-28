@@ -1,4 +1,4 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
   {
@@ -7,21 +7,23 @@ const userSchema = new mongoose.Schema(
       type: String,
     },
     mobileNumber: {
-      required: false,
-      type: String,
-      unique: true,
+      required: true,
+      type: Number,
+    },
+    countryCode: {
+      required: true,
+      type: Number,
     },
     active: {
       required: false,
       type: Boolean,
-      default: true
+      default: true,
     },
-
   },
   {
     timestamps: true,
   }
 );
-
+userSchema.index({ countryCode: 1, mobileNumber: 1 }, { unique: true });
 userSchema.set("collection", "user");
 module.exports = mongoose.model("user", userSchema);

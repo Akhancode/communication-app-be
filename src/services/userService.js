@@ -1,6 +1,7 @@
 // const UserModel = require('../models/userModel');
 
 const userModel = require("../models/user.model");
+const { createIndexes } = require("../utils/mongoHelper/mongoHelper");
 
 exports.getAllUsers = async () => {
   try {
@@ -13,10 +14,12 @@ exports.getAllUsers = async () => {
 };
 exports.createUser = async (req,res) => {
   try {
-    const { userName, mobileNumber } = req.body;
+    const { userName, mobileNumber,countryCode } = req.body;
+   
     const user = new userModel({
       userName,
       mobileNumber,
+      countryCode
     });
     return await user.save();
   } catch (error) {
