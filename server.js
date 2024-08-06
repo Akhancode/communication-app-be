@@ -2,17 +2,17 @@ const express = require('express');
 const app = express();
 const publicRoute = require('./src/routes/public/index')
 const errorHandler = require('./src/middleware/errorHandler')
-const chalk = require('chalk');
+
+
+
+
 require('dotenv').config();
 
 const mongoose = require('mongoose');
-const syncIndexesInDatabase = require('./src/middleware/syncIndexesInDatabase');
-const { createIndexes, syncIndexInMongo } = require('./src/utils/mongoHelper/mongoHelper');
-
 
 const mongoString = process.env.MONGO_URL;
 
-mongoose.connect(mongoString);
+mongoose.connect("mongodb+srv://akhancode:Tgu49S6knBIT2rZE@cluster0.d5nj05z.mongodb.net/communication_db?retryWrites=true&w=majority&appName=Cluster0");
 
 const database = mongoose.connection;
 
@@ -24,7 +24,7 @@ database.on("error", (error) => {
 
 database.once("connected", () => {
   console.log("Connected to MongoDB");
-  syncIndexInMongo()
+  
 });
 
 
@@ -34,12 +34,9 @@ app.use(express.json());
 
 
 app.use((req, res, next) => {
-  console.log( `%c${req.method} ${req.url}`, "color:green;");
+  console.log(`%c${req.method} ${req.url}`,"color:green;");
   next();
 });
-
-
-
 
 app.use('/api', publicRoute);
 // app.use('/admin/api', userRoutes);
