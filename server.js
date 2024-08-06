@@ -2,19 +2,20 @@ const express = require('express');
 const app = express();
 const publicRoute = require('./src/routes/public/index')
 const errorHandler = require('./src/middleware/errorHandler')
+const chalk = require('chalk');
 require('dotenv').config();
 
 const mongoose = require('mongoose');
 const syncIndexesInDatabase = require('./src/middleware/syncIndexesInDatabase');
 const { createIndexes, syncIndexInMongo } = require('./src/utils/mongoHelper/mongoHelper');
 
-// Connection URI
+
 const mongoString = process.env.MONGO_URL;
 
 mongoose.connect(mongoString);
 
 const database = mongoose.connection;
-// exporting for this.transaction
+
 
 
 database.on("error", (error) => {
@@ -31,10 +32,14 @@ database.once("connected", () => {
 const port = process.env.PORT;
 app.use(express.json());
 
-// Sample route
-app.get('/', (req, res) => {
-  res.send('Hello World!');
+
+app.use((req, res, next) => {
+  console.log( `%c${req.method} ${req.url}`, "color:green;");
+  next();
 });
+
+
+
 
 app.use('/api', publicRoute);
 // app.use('/admin/api', userRoutes);
@@ -42,5 +47,5 @@ app.use('/api', publicRoute);
 app.use(errorHandler)
 // Start the server
 app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+  console.log(`%c Server is running at http://localhost:${port}`, 'color:green;');
 });
