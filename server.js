@@ -2,9 +2,9 @@ const express = require('express');
 const app = express();
 const publicRoute = require('./src/routes/public/index')
 const errorHandler = require('./src/middleware/errorHandler')
+const bodyParser = require('body-parser')
 
-
-
+const cors = require('cors')
 
 require('dotenv').config();
 
@@ -15,8 +15,10 @@ const mongoString = process.env.MONGO_URL;
 mongoose.connect("mongodb+srv://akhancode:Tgu49S6knBIT2rZE@cluster0.d5nj05z.mongodb.net/communication_db?retryWrites=true&w=majority&appName=Cluster0");
 
 const database = mongoose.connection;
+app.use(cors());
+app.use(bodyParser.json());
 
-
+app.use(bodyParser.urlencoded({ extended: true }));
 
 database.on("error", (error) => {
   console.error(error);

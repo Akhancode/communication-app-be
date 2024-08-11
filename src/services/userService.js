@@ -5,21 +5,27 @@ const { createIndexes } = require("../utils/mongoHelper/mongoHelper");
 
 exports.getAllUsers = async () => {
   try {
-    throw "this";
-    return "user";
-    return await UserModel.find();
+    return await userModel.find();
+  } catch (error) {
+    throw new Error(error); // Customize error message
+  }
+};
+exports.getUserByNumberAndPass = async (req) => {
+  try {
+    const {mobileNumber,password} = req.body
+    return await userModel.findOne({mobileNumber,password});
   } catch (error) {
     throw new Error(error); // Customize error message
   }
 };
 exports.createUser = async (req,res) => {
   try {
-    const { userName, mobileNumber,countryCode } = req.body;
-   
+    const { userName, mobileNumber,countryCode,password } = req.body;
+    console.log(req.body)
     const user = new userModel({
-      userName,
       mobileNumber,
-      countryCode
+      password,
+      userName
     });
     return await user.save();
   } catch (error) {

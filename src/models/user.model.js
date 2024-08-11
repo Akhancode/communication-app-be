@@ -11,8 +11,13 @@ const userSchema = new mongoose.Schema(
       type: Number,
     },
     countryCode: {
-      required: true,
+      required: false,
       type: Number,
+      default:'91'
+    },
+    password: {
+      required: true,
+      type: String,
     },
     active: {
       required: false,
